@@ -1,0 +1,4 @@
+.clip-left-shape {
+  clip-path: polygon(0 0, 75% 0, 65% 50%, 75% 100%, 0% 100%);
+}
+
