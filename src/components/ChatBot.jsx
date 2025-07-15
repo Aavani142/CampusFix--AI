@@ -7,7 +7,6 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [pendingComplaint, setPendingComplaint] = useState(null);
   const [user, setUser] = useState(null);
   const chatContainerRef = useRef(null);
 
@@ -27,44 +26,45 @@ export default function ChatBot() {
     setLoading(true);
 
     try {
-      // Check for complaint intent
-      if (/not.*register|you.*register|can.*you.*register|file.*complaint/i.test(input)) {
-        setPendingComplaint(input);
-        setMessages((prev) => [
-          ...prev,
-          { sender: 'bot', text: 'I understand this is a serious issue. Would you like me to register a formal complaint for you?' },
-        ]);
-        return;
-      }
+      // Auto-detect sensitive complaints
+      const sensitiveComplaintKeywords = /harass|ragging|bully|abuse|scared|afraid|hesitant|don't.*want.*complain|can't.*complain|fear.*complaint/i;
 
-      // Confirm complaint
-      if (/^(yes|yeah|sure|okay|go ahead)/i.test(input) && pendingComplaint) {
+      if (sensitiveComplaintKeywords.test(input)) {
         if (user) {
           await addDoc(collection(db, 'complaints'), {
-            title: 'Roommate Conflict: Noise Disturbance',
-            description: pendingComplaint,
-            category: 'Residential Issue',
-            status: 'Pending',
+            title: 'Sensitive Complaint (Filed by Bot)',
+            description: input,
+            category: 'Safety/Harassment',
+            status: 'Flagged',
+            priority: 'High',
+            isSensitive: true,
             createdAt: serverTimestamp(),
             userId: user.uid,
             userEmail: user.email,
             userName: user.displayName || 'Anonymous',
           });
+
           setMessages((prev) => [
             ...prev,
-            { sender: 'bot', text: 'Your complaint has been submitted successfully. The residential staff will look into it shortly.' },
+            {
+              sender: 'bot',
+              text: "Thank you for trusting me. I’ve filed a confidential complaint for you. Please know you're not alone — support will be notified, and you're safe. 💙",
+            },
           ]);
         } else {
           setMessages((prev) => [
             ...prev,
-            { sender: 'bot', text: 'Please log in first so I can submit the complaint on your behalf.' },
+            {
+              sender: 'bot',
+              text: 'I want to help, but I need you to log in so I can file a confidential complaint for you.',
+            },
           ]);
         }
-        setPendingComplaint(null);
+        setLoading(false);
         return;
       }
 
-      
+      // Regular chatbot response via Gemini API
       const res = await fetch('https://us-central1-campusfix-ai.cloudfunctions.net/chatWithGemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -120,7 +120,6 @@ export default function ChatBot() {
         <div ref={chatContainerRef}></div>
       </div>
 
-      {/* Input Bar */}
       <div className="mt-4 flex items-center gap-2">
         <input
           type="text"
@@ -140,7 +139,6 @@ export default function ChatBot() {
         </button>
       </div>
 
-      {/* Animations & Loader CSS */}
       <style>{`
         @keyframes slide-in-left {
           0% { transform: translateX(-30px); opacity: 0; }

@@ -2,18 +2,47 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../App.css";
 import logo from "../assets/logo.png";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../config";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleGoogleLogin = async (setError) => {
-    setError("Google login not implemented yet.");
+  // GOOGLE LOGIN
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const userDocRef = doc(db, "Users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      // If new Google user, optionally create their Firestore doc
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+          email: user.email,
+          role: "user", // default role
+          createdAt: new Date()
+        });
+        navigate("/home");
+      } else {
+        const data = userDoc.data();
+        if (data?.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/home");
+        }
+      }
+    } catch (err) {
+      console.error("Google login error:", err.message);
+      setError("Google login failed. Please try again.");
+    }
   };
 
+  // EMAIL/PASSWORD LOGIN
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -108,7 +137,7 @@ function Login() {
             <div className="mt-6 text-sm text-gray-500">Or Login with</div>
             <div className="mt-2 flex gap-4">
               <button
-                onClick={() => handleGoogleLogin(setError)}
+                onClick={handleGoogleLogin}
                 className="px-4 py-2 border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100"
               >
                 <img
@@ -126,6 +155,7 @@ function Login() {
 }
 
 export default Login;
+
 
 
 

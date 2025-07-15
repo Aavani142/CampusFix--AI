@@ -10,14 +10,15 @@ import { getStorage } from "firebase/storage";
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDKoRVkHutlHPAA4ek6S_p-XvZsQaJyV1Q",
-  authDomain: "campusfix-ai.firebaseapp.com",
-  projectId: "campusfix-ai",
-  storageBucket: "campusfix-ai.firebasestorage.app",
-  messagingSenderId: "96423908029",
-  appId: "1:96423908029:web:46d5580350e4e42a3a9dd4",
-  
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
+
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
