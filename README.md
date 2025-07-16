@@ -1,12 +1,60 @@
-# React + Vite
+#  CampusFix AI  
+> Fix campus issues fast. No fear. No paperwork. Just click.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+If you’ve ever had a leaking faucet in your hostel, broken chairs in your classroom, or worse — an issue you were afraid to report — you know how frustrating it can be to get it fixed. Complaints get ignored, paperwork gets lost, and students fear judgment.
 
-Currently, two official plugins are available:
+**We built CampusFix AI to change that.**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+ **Live Demo**: [https://campusfix-ai.web.app](https://campusfix-ai.web.app)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##  What This Does
+
+CampusFix AI is a web platform for college students to easily report campus issues — anonymously or with identity. Issues are categorized, logged in real-time, and assigned to administrators for resolution.
+
+Admins get a secure dashboard to track, manage, and close complaints.
+
+---
+
+##  Features
+
+-  AI Assistant to help write complaints clearly
+-  Anonymous Complaint Option
+-  Secure Login with Firebase Auth (Students + Admins)
+-  Categorized Complaints (Maintenance, Cleanliness, Harassment, etc.)
+-  Admin Dashboard to view/resolve complaints
+-  Real-time database with Firebase Firestore
+-  Fully responsive (Mobile + Desktop)
+-  Role-based access (Student / Admin)
+
+---
+
+##  Tech Stack
+
+| Layer      | Technology                              |
+|------------|------------------------------------------|
+| Frontend   | React, Tailwind CSS / Bootstrap          |
+| Backend    | Firebase Cloud Functions (Node.js)       |
+| Database   | Firebase Firestore                       |
+| Auth       | Firebase Authentication                  |
+| AI         | Google Generative AI (Gemini Pro)        |
+| Hosting    | Firebase Hosting                         |
+
+---
+
+##  User Roles
+
+### Students
+- Submit complaints with or without login
+- Choose categories and locations
+- Use chatbot assistant
+- Track status (if logged in)
+
+### Admins
+- Secure login
+- View complaints by category/status
+- Approve / reject / resolve with remarks
+- Filter resolved / unresolved
+
+---
